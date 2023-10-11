@@ -34,6 +34,21 @@ function main() {
 
         // Additional cases...
 
+        case Requests.DELETE_FROM_COLLECTION:
+          break;
+
+        case Requests.DROP_DB:
+          break;
+
+        case Requests.GET_ALL_FROM_COLLECTION:
+          break;
+
+        case Requests.GET_FROM_COLLECTION:
+          break;
+
+        case Requests.UPDATE_ITEM_FROM_COLLECTION:
+          break;
+
         default:
         // Code to execute when expression doesn't match any case
       }
