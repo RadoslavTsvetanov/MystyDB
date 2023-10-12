@@ -17,22 +17,16 @@ function main() {
   client.connect(port, host, () => {
     console.log(`Connected to ${host}:${port}`);
   });
-
-  // Send data to the server
-  const dataToSend = JSON.stringify({
-    REQUEST: Requests.CREATE_DB,
+  const db_client = new Client("8080", "127.0.0.1");
+  db_client.connect();
+  // db_client.create_collection({
+  //   name: "test",
+  // });
+  db_client.add_item_to_collection({
+    item: { name: "test" },
+    collection_name: "test",
   });
-  client.write(dataToSend);
-  const db_client = new Client("hi", client);
-  // Handle data received from the server
-  client.on("data", (data) => {
-    console.log(`Received data from server: ${data}`);
-  });
-
-  // Handle the connection being closed
-  client.on("close", () => {
-    console.log("Connection closed");
-  });
+  db_client.closeConnection();
 }
 
 main();

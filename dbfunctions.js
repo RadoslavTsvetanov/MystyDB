@@ -4,20 +4,23 @@ class DB {
   constructor(folder_path) {
     this.folderpath = folder_path;
   }
+  add_element_to_collection(item, collection_name) {
+    const data_from_collection = this.gett_all_items_from_db(collection_name); // Read existing data
+    log(data_from_collection);
+    data_from_collection.push(item); // Modify the data
+
+    this.write_to_db(collection_name, data_from_collection); // Write the modified data back to the file
+  }
+
   drop_db() {
     //will be called drysty
-    fs.unlink(this.filePath, (err) => {
+    fs.unlink(this.folderpath, (err) => {
       if (err) {
         console.error("Error deleting the file:", err);
       } else {
         console.log("File deleted successfully.");
       }
     });
-  }
-
-  add_to_db(item, collection_name) {
-    var data_from_collection = this.gett_all_items_from_db(collection_name);
-    data_from_collection.append(item);
   }
 
   create_db(name) {
@@ -33,25 +36,28 @@ class DB {
   create_collection(name) {
     try {
       fs.writeFileSync(
-        `${this.folderpath}/${name}`,
+        `${this.folderpath}/${name}.json`,
         JSON.stringify([], null, 2)
       );
     } catch (err) {
       log(err);
     }
-    this.data_from_file[name] = [];
   }
 
-  delete_from_db(item_filter, collection_name, only_first) {
+  delete_from_collection(item_filter, collection_name, only_first) {
     const data = this.gett_all_items_from_db(collection_name);
     for (let i = 0; i < data.length; i++) {
       if (doesObjectMatchTemplate(item_filter, data[i])) {
-        data;
+        data.splice(i, 1);
+        if (only_first) {
+          this.write_to_db(collection_name, data);
+        }
       }
     }
   }
 
   write_to_db(collection_name, content) {
+    log(content);
     fs.writeFile(
       `${this.folderpath}/${collection_name}`,
       JSON.stringify(content),
@@ -82,8 +88,11 @@ class DB {
   }
 
   gett_all_items_from_db(collection_name) {
-    const data = fs.readFileSync(`${this.folderpath}/${collection_name}`);
-    return data;
+    const data = fs.readFileSync(
+      `${this.folderpath}/${collection_name}`,
+      "utf-8"
+    );
+    return JSON.parse(data);
   }
 
   // Define a filter condition using a filter function

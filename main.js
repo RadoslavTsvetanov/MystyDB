@@ -9,6 +9,7 @@ function main() {
     DELETE_FROM_COLLECTION: 5,
     DROP_DB: 6,
     UPDATE_ITEM_FROM_COLLECTION: 7,
+    ADD_ITEM_TO_COLLECTION: 8,
   };
   let db = new DB("./db");
   const server = net.createServer((socket) => {
@@ -24,6 +25,7 @@ function main() {
 
       switch (real_data.REQUEST) {
         case Requests.CREATE_COLLECTION:
+          db.create_collection(real_data.NAME);
           // Code to execute when expression matches value1
           break;
 
@@ -35,12 +37,19 @@ function main() {
         // Additional cases...
 
         case Requests.DELETE_FROM_COLLECTION:
+          db.delete_from_collection();
           break;
 
         case Requests.DROP_DB:
+          db.drop_db();
           break;
 
         case Requests.GET_ALL_FROM_COLLECTION:
+          db.get_from_db(
+            real_data.FILTER,
+            real_data.COLLECTION_NAME,
+            real_data.ONLY_FIRST
+          );
           break;
 
         case Requests.GET_FROM_COLLECTION:
@@ -49,7 +58,15 @@ function main() {
         case Requests.UPDATE_ITEM_FROM_COLLECTION:
           break;
 
+        case Requests.ADD_ITEM_TO_COLLECTION:
+          db.add_element_to_collection(
+            real_data.ITEM,
+            real_data.COLLECTION_NAME
+          );
+          break;
+
         default:
+          console.log("IMVALID REQUEST TYPE");
         // Code to execute when expression doesn't match any case
       }
 

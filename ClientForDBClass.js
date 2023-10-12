@@ -1,8 +1,20 @@
+const net = require("net");
+
 class Client {
   constructor(port, host) {
     this.port = port;
     this.host = host;
     this.client = new net.Socket();
+    this.requests = {
+      CREATE_DB: 1,
+      CREATE_COLLECTION: 2,
+      GET_ALL_FROM_COLLECTION: 3,
+      GET_FROM_COLLECTION: 4,
+      DELETE_FROM_COLLECTION: 5,
+      DROP_DB: 6,
+      UPDATE_ITEM_FROM_COLLECTION: 7,
+      ADD_ITEM_TO_COLLECTION: 8,
+    };
   }
   connect() {
     this.client.connect(this.port, this.host, () => {
@@ -19,15 +31,49 @@ class Client {
   }
 
   sendData(data) {
-    this.client.write(data);
+    this.client.write(JSON.stringify(data));
   }
 
-  sendRequest1() {
-    this.sendData("Request 1 data");
+  create_db() {
+    const REQUEST = {
+      REQUEST: this.requests.CREATE_DB,
+    };
+    this.sendData(REQUEST);
   }
 
-  sendRequest2() {
-    this.sendData("Request 2 data");
+  delete_db() {
+    const REQUEST = {
+      REQUEST: this.requests.DROP_DB,
+    };
+    // drysty
+    this.sendData(REQUEST);
+  }
+
+  get_whole_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.GET_ALL_FROM_COLLECTION,
+      FILTER: data.filter,
+      COLLOECTION_NAME: data.collection_name,
+      ONLY_FIRST: data.only_first,
+    };
+    this.sendData(REQUEST);
+  }
+
+  create_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.CREATE_COLLECTION,
+      NAME: data.name,
+    };
+    this.sendData(REQUEST);
+  }
+
+  add_item_to_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.ADD_ITEM_TO_COLLECTION,
+      ITEM: data.item,
+      COLLECTION_NAME: `${data.collection_name}.json`,
+    };
+    this.sendData(REQUEST);
   }
 
   closeConnection() {
