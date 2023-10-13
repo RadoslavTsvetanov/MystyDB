@@ -14,6 +14,7 @@ class Client {
       DROP_DB: 6,
       UPDATE_ITEM_FROM_COLLECTION: 7,
       ADD_ITEM_TO_COLLECTION: 8,
+      DELETE_COLLECTION: 9,
     };
   }
   connect() {
@@ -52,9 +53,7 @@ class Client {
   get_whole_collection(data) {
     const REQUEST = {
       REQUEST: this.requests.GET_ALL_FROM_COLLECTION,
-      FILTER: data.filter,
-      COLLOECTION_NAME: data.collection_name,
-      ONLY_FIRST: data.only_first,
+      COLLECTION_NAME: `${data.collection_name}.json`,
     };
     this.sendData(REQUEST);
   }
@@ -72,6 +71,45 @@ class Client {
       REQUEST: this.requests.ADD_ITEM_TO_COLLECTION,
       ITEM: data.item,
       COLLECTION_NAME: `${data.collection_name}.json`,
+    };
+    this.sendData(REQUEST);
+  }
+
+  get_from_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.GET_FROM_COLLECTION,
+      FILTER: data.filter,
+      COLLECTION_NAME: `${data.collection_name}.json`,
+      ONLY_FIRST: data.only_first,
+    };
+
+    this.sendData(REQUEST);
+  }
+
+  update_item_in_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.UPDATE_ITEM_FROM_COLLECTION,
+      FILTER: data.filter,
+      NEW_ITEM: data.new_item,
+      COLLECTION_NAME: `${data.collection_name}.json`,
+      ONLY_FIRST: data.only_first,
+    };
+    this.sendData(REQUEST);
+  }
+  delete_from_collection(data) {
+    const REQUEST = {
+      REQUEST: this.requests.DELETE_FROM_COLLECTION,
+      FILTER: data.filter,
+      COLLECTION_NAME: `${data.collection_name}.json`,
+      ONLY_FIRST: data.only_first,
+    };
+    this.sendData(REQUEST);
+  }
+
+  delete_collection(collectionName) {
+    const REQUEST = {
+      REQUEST: this.requests.DELETE_COLLECTION,
+      COLLECTION_NAME: `${collectionName}.json`,
     };
     this.sendData(REQUEST);
   }

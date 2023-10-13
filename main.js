@@ -10,9 +10,13 @@ function main() {
     DROP_DB: 6,
     UPDATE_ITEM_FROM_COLLECTION: 7,
     ADD_ITEM_TO_COLLECTION: 8,
+    DELETE_COLLECTION: 9,
   };
   let db = new DB("./db");
   const server = net.createServer((socket) => {
+    function send_response(response) {
+      socket.write(JSON.stringify(response));
+    }
     // Handle incoming connections
 
     // Set encoding for text data (optional)
@@ -45,17 +49,30 @@ function main() {
           break;
 
         case Requests.GET_ALL_FROM_COLLECTION:
-          db.get_from_db(
+          let response1 = db.gett_all_items_from_db(real_data.COLLECTION_NAME);
+          send_response(response1);
+          break;
+
+        case Requests.GET_FROM_COLLECTION:
+          const response2 = db.get_from_db(
             real_data.FILTER,
+            real_data.COLLECTION_NAME,
+            real_data.ONLY_FIRST
+          );
+          send_response(response2);
+          break;
+
+        case Requests.UPDATE_ITEM_FROM_COLLECTION:
+          db.update_item_from_db(
+            real_data.FILTER,
+            real_data.NEW_ITEM,
             real_data.COLLECTION_NAME,
             real_data.ONLY_FIRST
           );
           break;
 
-        case Requests.GET_FROM_COLLECTION:
-          break;
-
-        case Requests.UPDATE_ITEM_FROM_COLLECTION:
+        case Requests.DELETE_COLLECTION:
+          db.delete_collection(real_data.COLLECTION_NAME);
           break;
 
         case Requests.ADD_ITEM_TO_COLLECTION:
