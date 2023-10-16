@@ -1,5 +1,18 @@
 const { log } = require("console");
 const fs = require("fs");
+const os = require("os");
+const path = require("path");
+
+function DoesDBFolderExist(folder_path) {
+  if (fs.existsSync(folder_path)) {
+    console.log("Folder exists.");
+    return true;
+  } else {
+    console.log("Folder does not exist.");
+    return false;
+  }
+}
+
 function doesObjectMatchTemplate(object, template) {
   console.log("-----");
   log(object);
@@ -17,7 +30,10 @@ function doesObjectMatchTemplate(object, template) {
 }
 class DB {
   constructor(folder_path) {
-    this.folderpath = folder_path;
+    this.folderpath = `${path.join(
+      os.homedir(),
+      "Desktop"
+    )}\\DB\\${folder_path}`;
   }
   add_element_to_collection(item, collection_name) {
     const data_from_collection = this.gett_all_items_from_db(collection_name); // Read existing data
@@ -48,12 +64,21 @@ class DB {
     });
   }
 
-  create_db(name) {
-    fs.mkdir(name, (err) => {
+  create_db() {
+    if (!DoesDBFolderExist(`${path.join(os.homedir(), "Desktop")}\\DB`)) {
+      fs.mkdir(`${path.join(os.homedir(), "Desktop")}\\DB`, (err) => {
+        if (err) {
+          console.log("Error creating");
+        } else {
+          log("succes");
+        }
+      });
+    }
+    fs.mkdir(this.folderpath, (err) => {
       if (err) {
         console.error("Error creating folder:", err);
       } else {
-        console.log(`Folder '${name}' created successfully.`);
+        console.log(`Folder  created successfully.`);
       }
     });
   }

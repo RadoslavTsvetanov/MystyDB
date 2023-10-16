@@ -6,18 +6,15 @@ function main() {
   // Connect to the server
   const port = 8080;
   const host = "127.0.0.1";
-  client.connect(port, host, () => {
-    console.log(`Connected to ${host}:${port}`);
-  });
   const db_client = new Client("8080", "127.0.0.1");
   db_client.connect();
   // db_client.create_collection({
   //   name: "test",
   // // });
-  // db_client.add_item_to_collection({
-  //   item: { name: "test" },
-  //   collection_name: "test",
-  // });
+  db_client.add_item_to_collection({
+    item: { name: "test" },
+    collection_name: "test",
+  });
   // db_client.get_whole_collection({
   //   filter: {
   //     name: "test",

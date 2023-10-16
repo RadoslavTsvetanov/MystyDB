@@ -5,3 +5,8 @@ class JSON_FUNCTIONS {
 
   delete_from_json_arr() {}
 }
+
+const net = require("net");
+const { Client } = require("client-package");
+
+Client.connect();

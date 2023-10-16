@@ -1,5 +1,6 @@
 const { DB } = require("./dbfunctions");
 const net = require("net");
+
 function main() {
   const Requests = {
     CREATE_DB: 1,
@@ -12,7 +13,7 @@ function main() {
     ADD_ITEM_TO_COLLECTION: 8,
     DELETE_COLLECTION: 9,
   };
-  let db = new DB("./db");
+  let db = new DB("test");
   const server = net.createServer((socket) => {
     function send_response(response) {
       socket.write(JSON.stringify(response));
@@ -99,6 +100,8 @@ function main() {
 
   const port = 8080;
   const host = "127.0.0.1";
+
+  db.create_collection("hi");
   server.listen(port, host, () => {
     console.log(`Server is listening on ${host}:${port}`);
   });
