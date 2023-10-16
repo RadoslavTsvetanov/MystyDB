@@ -85,6 +85,7 @@ class DB {
 
   create_collection(name) {
     try {
+      log(this.folderpath);
       fs.writeFileSync(
         `${this.folderpath}/${name}.json`,
         JSON.stringify([], null, 2)
@@ -138,7 +139,7 @@ class DB {
 
   gett_all_items_from_db(collection_name) {
     const data = fs.readFileSync(
-      `${this.folderpath}/${collection_name}`,
+      `${this.folderpath}\\${collection_name}.json`,
       "utf-8"
     );
     return JSON.parse(data);
